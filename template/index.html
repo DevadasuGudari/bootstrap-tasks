@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --vinyl: #16140F;
+            --vinyl-2: #201D16;
+            --paper: #F2EAD8;
+            --paper-2: #E9DFC7;
+            --amber: #E8A33D;
+            --amber-dim: #C68A2E;
+            --rust: #B24B3C;
+            --moss: #5B6B4E;
+            --ink: #1E1B14;
+            --ink-soft: #55503F;
+            --cream-text: #F3ECDB;
+            --line: rgba(30, 27, 20, 0.12);
+            --line-dark: rgba(243, 236, 219, 0.12);
+            --radius-card: 4px;
+            --radius-pill: 999px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            font-size: 14.5px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1,
+        h2,
+        h3,
+        h5,
+        .font-display {
+            font-family: 'Fraunces', Georgia, serif;
+            color: var(--ink);
+            letter-spacing: -0.01em;
+        }
+
+        a {
+            color: inherit;
+        }
+
+
+
+        .shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--vinyl);
+            color: var(--cream-text);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 18px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 6px 22px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid var(--line-dark);
+        }
+
+        .brand-mark {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background:
+                radial-gradient(circle at center,
+                    var(--vinyl) 0 4px,
+                    var(--amber) 4px 5px,
+                    var(--vinyl) 5px 100%),
+                repeating-radial-gradient(circle at center,
+                    rgba(243, 236, 219, 0.18) 0 1px,
+                    transparent 1px 3px);
+            border: 1px solid var(--line-dark);
+        }
+
+        .brand-text {
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 1.15;
+            color: var(--cream-text);
+        }
+
+        .brand-text small {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 9.5px;
+            letter-spacing: 0.12em;
+            color: var(--amber);
+            margin-top: 2px;
+        }
+
+        .side-nav .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(243, 236, 219, 0.62);
+            font-size: 13.5px;
+            font-weight: 500;
+            padding: 9px 10px;
+            border-radius: var(--radius-card);
+            margin-bottom: 2px;
+            transition: background .15s ease, color .15s ease;
+        }
+
+        .side-nav .nav-link i {
+            font-size: 15px;
+            width: 18px;
+            text-align: center;
+        }
+
+        .side-nav .nav-link:hover {
+            color: var(--cream-text);
+            background: rgba(243, 236, 219, 0.06);
+        }
+
+        .side-nav .nav-link.active {
+            color: var(--vinyl);
+            background: var(--amber);
+            font-weight: 600;
+        }
+
+        .side-foot {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--line-dark);
+            font-size: 11.5px;
+            color: rgba(243, 236, 219, 0.45);
+        }
+
+        .catno {
+            display: inline-block;
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            color: var(--ink-soft);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-pill);
+            padding: 3px 9px;
+        }
+
+        .catno.on-dark {
+            color: var(--amber);
+            border-color: var(--line-dark);
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 28px;
+            background: var(--paper);
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            color: var(--ink-soft);
+        }
+
+
+
+        .search-wrap {
+            background: var(--paper-2);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-pill);
+            padding: 3px 4px 3px 14px;
+        }
+
+        .search-wrap input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 13px;
+            width: 0;
+            transition: width .2s ease, padding .2s ease;
+            color: var(--ink);
+        }
+
+        .search-wrap input.open {
+            width: 170px;
+            padding-right: 6px;
+        }
+
+        .search-wrap input::placeholder {
+            color: var(--ink-soft);
+        }
+
+        .icon-btn {
+            width: 34px;
+            height: 34px;
+            border: 1px solid var(--line);
+            background: var(--paper);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink);
+            flex-shrink: 0;
+        }
+
+        .icon-btn:hover {
+            background: var(--paper-2);
+        }
+
+
+
+        .content {
+            padding: 24px 28px 48px;
+        }
+
+        .block {
+            margin-bottom: 22px;
+        }
+
+        .block-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .block-head h2 {
+            font-size: 19px;
+            margin: 0;
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            background: var(--paper-2);
+            border-radius: var(--radius-card);
+            padding: 26px 28px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+        .hero p {
+            color: black;
+            margin: 0;
+            max-width: 46ch;
+            font-size: 13.5px;
+        }
+
+
+
+        .btn {
+            border-radius: var(--radius-card);
+            font-size: 13.5px;
+            font-weight: 600;
+            padding: 8px 16px;
+        }
+
+        .btn-rust {
+            background: var(--rust);
+            border-color: var(--rust);
+            color: var(--cream-text);
+        }
+
+        .btn-rust:hover {
+            background: #9c3f32;
+            border-color: #9c3f32;
+            color: var(--cream-text);
+        }
+
+        .btn-outline-ink {
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--ink);
+        }
+
+        .btn-outline-ink:hover {
+            background: var(--paper-2);
+            color: var(--ink);
+        }
+
+
+
+        .service-alert {
+            background: #fff3cd;
+            border: 1px solid #e8c96a;
+            color: #664d03;
+            border-radius: var(--radius-card);
+            font-size: 12.5px;
+            padding: 10px 12px;
+        }
+
+        .service-alert .alert-icon {
+            color: #9a7400;
+            font-size: 14px;
+        }
+
+        .service-alert strong {
+            color: #503c00;
+        }
+
+        .service-alert .btn-close {
+            font-size: 10px;
+        }
+
+
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-card);
+        }
+
+        .card-header {
+            background: transparent;
+            border-bottom: 1px solid var(--line);
+            font-weight: 600;
+            font-size: 13.5px;
+            padding: 12px 16px;
+        }
+
+        .stat-card {
+            padding: 2px 0;
+        }
+
+        .stat-label {
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: var(--ink-soft);
+        }
+
+        .stat-num {
+            font-family: 'Fraunces', serif;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .stat-trend {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .stat-trend.up {
+            color: var(--moss);
+        }
+
+        .stat-trend.down {
+            color: var(--rust);
+        }
+
+
+
+        .progress {
+            height: 6px;
+            background: var(--paper-2);
+            border-radius: var(--radius-pill);
+        }
+
+        .progress-bar {
+            background: var(--moss);
+            border-radius: var(--radius-pill);
+        }
+
+        .progress-bar.amber {
+            background: var(--amber);
+        }
+
+
+
+        .badge {
+            font-weight: 600;
+            font-size: 10.5px;
+            letter-spacing: 0.02em;
+            padding: 4px 8px;
+            border-radius: var(--radius-pill);
+        }
+
+        .bg-instock {
+            background: rgba(91, 107, 78, 0.15) !important;
+            color: var(--moss) !important;
+        }
+
+        .bg-low {
+            background: rgba(232, 163, 61, 0.2) !important;
+            color: var(--amber-dim) !important;
+        }
+
+        .bg-out {
+            background: rgba(178, 75, 60, 0.15) !important;
+            color: var(--rust) !important;
+        }
+
+
+
+        .nav-tabs {
+            border-bottom: 1px solid var(--line);
+            gap: 4px;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--ink-soft);
+            font-weight: 600;
+            font-size: 13px;
+            padding: 8px 4px;
+            margin-right: 18px;
+            border-radius: 0;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--ink);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--ink);
+            background: transparent;
+            border-bottom-color: var(--rust);
+        }
+
+
+
+        .list-group-item {
+            border-color: var(--line);
+        }
+
+        .order-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 4px;
+        }
+
+        .order-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .order-meta .title {
+            font-weight: 600;
+            font-size: 13.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .order-meta .sub {
+            font-size: 12px;
+            color: var(--ink-soft);
+            margin-top: 1px;
+        }
+
+        .order-amount {
+            font-weight: 600;
+            font-size: 13.5px;
+            white-space: nowrap;
+        }
+
+        .order-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background:
+                radial-gradient(circle at center,
+                    var(--paper) 0 5px,
+                    var(--ink) 5px 6px,
+                    var(--vinyl-2) 6px 100%),
+                repeating-radial-gradient(circle at center,
+                    rgba(243, 236, 219, 0.12) 0 1.5px,
+                    transparent 1.5px 4px);
+            border: 1px solid var(--line);
+        }
+
+
+
+        .pagination .page-link {
+            color: var(--ink);
+            background: #fff;
+            border-color: var(--line);
+            font-size: 12.5px;
+        }
+
+        .pagination .page-link:hover {
+            color: var(--vinyl);
+            background: var(--paper-2);
+            border-color: var(--amber);
+        }
+
+        .pagination .page-item.active .page-link {
+            color: var(--vinyl);
+            background: var(--amber);
+            border-color: var(--amber);
+            font-weight: 700;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: var(--ink-soft);
+            background: var(--paper-2);
+            border-color: var(--line);
+        }
+
+
+
+        .featured-carousel .carousel-item {
+            border-radius: var(--radius-card);
+            overflow: hidden;
+        }
+
+        .featured-slide {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px 22px;
+            background:
+                linear-gradient(to top,
+                    rgba(22, 20, 15, 0.9),
+                    rgba(22, 20, 15, 0.15)),
+                linear-gradient(135deg,
+                    var(--vinyl-2),
+                    var(--vinyl));
+        }
+
+        .featured-slide h5 {
+            color: var(--cream-text);
+            margin: 4px 0 2px;
+            font-size: 19px;
+        }
+
+        .featured-slide p {
+            color: rgba(243, 236, 219, 0.7);
+            margin: 0;
+            font-size: 12.5px;
+        }
+
+        .featured-carousel .carousel-indicators button {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(243, 236, 219, 0.4);
+            border: none;
+        }
+
+        .featured-carousel .carousel-indicators button.active {
+            background: var(--amber);
+        }
+
+
+
+        .accordion-item {
+            border-color: var(--line);
+        }
+
+        .accordion-button {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 11px 4px;
+            background: transparent;
+            color: var(--ink);
+        }
+
+        .accordion-button:not(.collapsed) {
+            background: transparent;
+            color: var(--rust);
+            box-shadow: none;
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+        }
+
+        .accordion-body {
+            padding: 0 4px 14px;
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+
+        .inventory-modal {
+            background: #ffffff;
+            border: none;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: none;
+        }
+
+        .inventory-modal .modal-header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 22px 54px 22px 18px;
+            min-height: 79px;
+            position: relative;
+        }
+
+        .inventory-modal .modal-title {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 26px;
+            font-weight: 500;
+            color: #2b2925;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .inventory-modal .modal-subtitle {
+            display: none;
+        }
+
+        .inventory-modal .modal-body {
+            background: #ffffff;
+            padding: 24px 18px 26px;
+        }
+
+        .inventory-modal .modal-footer {
+            background: #ffffff;
+            border-top: 1px solid #e5e5e5;
+            padding: 19px 18px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .inventory-modal .form-label {
+            color: #302d28;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 11px;
+        }
+
+        .inventory-modal .form-control,
+        .inventory-modal .form-select {
+            height: 47px;
+            background: #ffffff;
+            color: #4d4d4d;
+            border: 1px solid #d9dde3;
+            border-radius: 7px;
+            font-size: 18px;
+            padding: 9px 14px;
+            box-shadow: none;
+        }
+
+        .inventory-modal .form-control::placeholder {
+            color: #777b80;
+            opacity: 1;
+        }
+
+        .inventory-modal .form-control:focus,
+        .inventory-modal .form-select:focus {
+            border-color: #b24b3c;
+            box-shadow: 0 0 0 2px rgba(178, 75, 60, 0.08);
+        }
+
+        .inventory-modal .form-select {
+            cursor: pointer;
+        }
+
+        .inventory-modal .btn-close {
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            margin: 0;
+            border: 0;
+            border-radius: 50%;
+            background-image: none;
+            background-color: transparent;
+            opacity: 1;
+            position: absolute;
+            top: 16px;
+            right: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .inventory-modal .btn-close::before,
+        .inventory-modal .btn-close::after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 16px;
+            width: 22px;
+            height: 2px;
+            background: #777777;
+            border-radius: 2px;
+        }
+
+        .inventory-modal .btn-close::before {
+            transform: rotate(45deg);
+        }
+
+        .inventory-modal .btn-close::after {
+            transform: rotate(-45deg);
+        }
+
+        .inventory-modal .btn-close:hover {
+            background: #f3f3f3;
+        }
+
+        .inventory-modal .btn-close:hover::before,
+        .inventory-modal .btn-close:hover::after {
+            background: #333333;
+        }
+
+        .inventory-modal .btn {
+            height: 49px;
+            padding: 0 20px;
+            border-radius: 5px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .inventory-modal .btn-outline-ink {
+            background: #ffffff;
+            border: 1px solid #222222;
+            color: #302d28;
+        }
+
+        .inventory-modal .btn-outline-ink:hover {
+            background: #f7f7f7;
+            color: #302d28;
+            border-color: #222222;
+        }
+
+        .inventory-modal .btn-rust {
+            background: #b84d3d;
+            border: 1px solid #b84d3d;
+            color: #ffffff;
+        }
+
+        .inventory-modal .btn-rust:hover {
+            background: #a94335;
+            border-color: #a94335;
+            color: #ffffff;
+        }
+
+        #addProductModal .modal-dialog {
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        .modal-backdrop.show {
+            opacity: 0.55;
+        }
+
+
+
+        @media (max-width: 991.98px) {
+
+            .content {
+                padding: 18px 16px 36px;
+            }
+
+            .topbar {
+                padding: 12px 16px;
+            }
+
+            .hero {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            #addProductModal .modal-dialog {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .inventory-modal .modal-header {
+                padding: 20px 16px;
+            }
+
+            .inventory-modal .modal-body {
+                padding: 22px 16px;
+            }
+
+            .inventory-modal .modal-footer {
+                padding: 16px;
+            }
+
+            .inventory-modal .modal-title {
+                font-size: 23px;
+            }
+
+            .inventory-modal .form-label {
+                font-size: 15px;
+            }
+
+            .inventory-modal .form-control,
+            .inventory-modal .form-select {
+                font-size: 16px;
+            }
+
+            .inventory-modal .modal-footer .btn {
+                flex: 1;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="shell">
+
+
+
+        <aside class="sidebar d-none d-lg-flex">
+
+            <div class="brand">
+
+                <div class="brand-mark"></div>
+
+                <div class="brand-text">
+                    GD
+                    <small>ONLINE STORE</small>
+                </div>
+
+            </div>
+
+            <nav class="nav flex-column side-nav">
+
+                <a class="nav-link active" href="#">
+                    <i class="bi bi-grid"></i>
+                    Overview
+                </a>
+
+                <a class="nav-link" href="#">
+                    <i class="bi bi-vinyl"></i>
+                    Products
+                </a>
+
+                <a class="nav-link" href="#">
+                    <i class="bi bi-headphones"></i>
+                    Collections
+                </a>
+
+                <a class="nav-link" href="#">
+                    <i class="bi bi-receipt"></i>
+                    Orders
+                </a>
+
+                <a class="nav-link" href="#">
+                    <i class="bi bi-people"></i>
+                    Customers
+                </a>
+
+                <a class="nav-link" href="#">
+                    <i class="bi bi-graph-up"></i>
+                    Reports
+                </a>
+
+                <a class="nav-link" href="#">
+                    <i class="bi bi-gear"></i>
+                    Settings
+                </a>
+
+            </nav>
+
+            <div class="side-foot">
+
+                <div class="catno on-dark mb-2">
+                    GD · 044
+                </div>
+
+                Console v2.1 — Online store
+
+            </div>
+
+        </aside>
+
+
+
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileNav"
+            style="background:var(--vinyl); color:var(--cream-text); width:260px;">
+
+            <div class="offcanvas-header border-bottom" style="border-color:var(--line-dark) !important;">
+
+                <div class="brand-text">
+                    GD
+                    <small>ONLINE STORE</small>
+                </div>
+
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas">
+                </button>
+
+            </div>
+
+            <div class="offcanvas-body">
+
+                <nav class="nav flex-column side-nav">
+
+                    <a class="nav-link active" href="#">
+                        <i class="bi bi-grid"></i>
+                        Overview
+                    </a>
+
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-vinyl"></i>
+                        Products
+                    </a>
+
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-headphones"></i>
+                        Collections
+                    </a>
+
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-receipt"></i>
+                        Orders
+                    </a>
+
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-people"></i>
+                        Customers
+                    </a>
+
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-graph-up"></i>
+                        Reports
+                    </a>
+
+                </nav>
+
+            </div>
+
+        </div>
+
+
+
+
+        <div class="main">
+
+
+
+
+            <div class="topbar">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#mobileNav">
+
+                        <i class="bi bi-list fs-4"></i>
+
+                    </button>
+
+                    <nav aria-label="breadcrumb">
+
+                        <ol class="breadcrumb mb-0" style="font-size:13px;">
+
+                            <li class="breadcrumb-item">
+
+                                <a href="#" style="color:var(--ink-soft); text-decoration:none;">
+
+                                    Console
+
+                                </a>
+
+                            </li>
+
+                            <li class="breadcrumb-item active fw-semibold" style="color:var(--ink);"
+                                aria-current="page">
+
+                                Overview
+
+                            </li>
+
+                        </ol>
+
+                    </nav>
+
+                </div>
+
+
+                <!-- Search -->
+
+                <div class="d-flex align-items-center gap-2">
+
+                    <div class="search-wrap d-flex align-items-center gap-2">
+
+                        <input type="text" id="orderSearchInput" placeholder="Search products…"
+                            oninput="filterOrders(this.value)">
+
+                        <button class="icon-btn" onclick="toggleSearch()" aria-label="Search products">
+
+                            <i class="bi bi-search"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <button class="icon-btn" aria-label="Notifications">
+
+                        <i class="bi bi-bell"></i>
+
+                    </button>
+
+
+                    <div class="dropdown">
+
+                        <button class="btn btn-sm d-flex align-items-center gap-2"
+                            style="border:1px solid var(--line); border-radius:4px;" data-bs-toggle="dropdown">
+
+                            <span class="order-thumb" style="width:26px;height:26px;">
+                            </span>
+
+                            <span class="fw-semibold" style="font-size:13.5px;">
+
+                                Devadasu R.
+
+                            </span>
+
+                            <i class="bi bi-chevron-down" style="font-size:11px;">
+                            </i>
+
+                        </button>
+
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    Store profile
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    Staff accounts
+                                </a>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    Sign out
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+            <div class="content">
+
+
+
+
+                <div class="hero">
+
+                    <div>
+
+                        <div class="catno mb-2">
+                            TUE · SEP 3
+                        </div>
+
+                        <h1>
+                            Welcome back, Devadasu.
+                        </h1>
+
+                        <p>
+                            Saturday's listening session is almost full, and three records need re-shelving from this
+                            morning's delivery.
+                        </p>
+
+                    </div>
+
+
+                    <div class="btn-group" role="group">
+
+                        <button class="btn btn-outline-ink" type="button">
+
+                            <i class="bi bi-plus-lg me-1"></i>
+                            New order
+
+                        </button>
+
+
+                        <!-- ADD PRODUCT BUTTON -->
+
+                        <button class="btn btn-rust" type="button" data-bs-toggle="modal"
+                            data-bs-target="#addProductModal">
+
+                            <i class="bi bi-vinyl-fill me-1"></i>
+                            Add record
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="alert service-alert d-flex align-items-center justify-content-between mb-3" role="alert">
+
+                    <div class="d-flex align-items-center">
+
+                        <i class="bi bi-info-circle alert-icon me-2"></i>
+
+                        <div>
+
+                            <strong>
+                                Turntable 2 is due for a cartridge check.
+                            </strong>
+
+                            It's been booked for 11 sessions since the last
+                            service — schedule a technician before Saturday's event.
+
+                        </div>
+
+                    </div>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    </button>
+
+                </div>
+
+
+
+
+                <section class="block">
+
+                    <div class="row g-3">
+
+
+                        <div class="col-6 col-lg-3">
+
+                            <div class="card stat-card h-100">
+
+                                <div class="card-body">
+
+                                    <div class="stat-label mb-1">
+                                        Today's revenue
+                                    </div>
+
+                                    <div class="stat-num" id="revenueCount">
+                                        ₹0
+                                    </div>
+
+                                    <div class="stat-trend up mt-1">
+
+                                        <i class="bi bi-arrow-up-short"></i>
+                                        12% vs last Tue
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6 col-lg-3">
+
+                            <div class="card stat-card h-100">
+
+                                <div class="card-body">
+
+                                    <div class="stat-label mb-1">
+                                        Records in stock
+                                    </div>
+
+                                    <div class="stat-num" id="stockCount">
+                                        0
+                                    </div>
+
+                                    <div class="stat-trend down mt-1">
+
+                                        <i class="bi bi-arrow-down-short"></i>
+                                        34 low stock
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6 col-lg-3">
+
+                            <div class="card stat-card h-100">
+
+                                <div class="card-body">
+
+                                    <div class="stat-label mb-1">
+                                        Session seats left
+                                    </div>
+
+                                    <div class="stat-num" id="seatsCount">
+                                        0 / 24
+                                    </div>
+
+                                    <div class="progress mt-2">
+
+                                        <div class="progress-bar amber" style="width:29%">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-6 col-lg-3">
+
+                            <div class="card stat-card h-100">
+
+                                <div class="card-body">
+
+                                    <div class="stat-label mb-1">
+                                        New members
+                                    </div>
+
+                                    <div class="stat-num" id="membersCount">
+                                        0
+                                    </div>
+
+                                    <div class="stat-trend up mt-1">
+
+                                        <i class="bi bi-arrow-up-short"></i>
+                                        this week
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+
+
+
+                <div class="row g-3">
+
+
+
+
+                    <div class="col-lg-7">
+
+
+
+                        <section class="block">
+
+                            <div class="card">
+
+                                <div class="card-body pb-0">
+
+                                    <ul class="nav nav-tabs">
+
+                                        <li class="nav-item">
+
+                                            <button class="nav-link active" data-bs-toggle="tab"
+                                                data-bs-target="#tab-orders">
+
+                                                Recent orders
+
+                                            </button>
+
+                                        </li>
+
+                                        <li class="nav-item">
+
+                                            <button class="nav-link" data-bs-toggle="tab"
+                                                data-bs-target="#tab-sessions">
+
+                                                Sessions today
+
+                                            </button>
+
+                                        </li>
+
+                                        <li class="nav-item">
+
+                                            <button class="nav-link" data-bs-toggle="tab"
+                                                data-bs-target="#tab-lowstock">
+
+                                                Low stock
+
+                                            </button>
+
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
+
+                                <div class="tab-content">
+
+
+                                    <div class="tab-pane fade show active p-3" id="tab-orders">
+
+                                        <div class="list-group list-group-flush" id="ordersList">
+
+
+                                            <div class="list-group-item order-row"
+                                                data-title="kind of blue miles davis">
+
+                                                <div class="order-thumb"></div>
+
+                                                <div class="order-meta">
+
+                                                    <div class="title">
+
+                                                        Kind of Blue — Miles Davis
+
+                                                        <span class="badge bg-instock ms-1">
+                                                            In stock
+                                                        </span>
+
+                                                    </div>
+
+                                                    <div class="sub">
+                                                        Ravi K. · Collection at store
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="order-amount">
+                                                    ₹2,450
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="list-group-item order-row" data-title="rumours fleetwood mac">
+
+                                                <div class="order-thumb"></div>
+
+                                                <div class="order-meta">
+
+                                                    <div class="title">
+
+                                                        Rumours — Fleetwood Mac
+
+                                                        <span class="badge bg-low ms-1">
+                                                            Low stock
+                                                        </span>
+
+                                                    </div>
+
+                                                    <div class="sub">
+                                                        Ananya S. · Ships tomorrow
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="order-amount">
+                                                    ₹2,100
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="list-group-item order-row" data-title="in rainbows radiohead">
+
+                                                <div class="order-thumb"></div>
+
+                                                <div class="order-meta">
+
+                                                    <div class="title">
+
+                                                        In Rainbows — Radiohead
+
+                                                        <span class="badge bg-out ms-1">
+                                                            Backordered
+                                                        </span>
+
+                                                    </div>
+
+                                                    <div class="sub">
+                                                        Dev M. · Awaiting restock
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="order-amount">
+                                                    ₹1,890
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="list-group-item order-row"
+                                                data-title="blue train john coltrane">
+
+                                                <div class="order-thumb"></div>
+
+                                                <div class="order-meta">
+
+                                                    <div class="title">
+
+                                                        Blue Train — John Coltrane
+
+                                                        <span class="badge bg-instock ms-1">
+                                                            In stock
+                                                        </span>
+
+                                                    </div>
+
+                                                    <div class="sub">
+                                                        Meera P. · Collection at store
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="order-amount">
+                                                    ₹2,650
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                        <div class="text-center text-muted d-none" id="noOrdersMsg">
+
+                                            No products match that search.
+
+                                        </div>
+
+
+
+
+                                        <nav class="mt-2">
+
+                                            <ul class="pagination pagination-sm justify-content-end mb-0">
+
+                                                <li class="page-item disabled">
+
+                                                    <a class="page-link" href="#">
+                                                        Prev
+                                                    </a>
+
+                                                </li>
+
+                                                <li class="page-item active">
+
+                                                    <a class="page-link" href="#">
+                                                        1
+                                                    </a>
+
+                                                </li>
+
+                                                <li class="page-item">
+
+                                                    <a class="page-link" href="#">
+                                                        2
+                                                    </a>
+
+                                                </li>
+
+                                                <li class="page-item">
+
+                                                    <a class="page-link" href="#">
+                                                        3
+                                                    </a>
+
+                                                </li>
+
+                                                <li class="page-item">
+
+                                                    <a class="page-link" href="#">
+                                                        Next
+                                                    </a>
+
+                                                </li>
+
+                                            </ul>
+
+                                        </nav>
+
+                                    </div>
+
+
+
+
+                                    <div class="tab-pane fade p-3" id="tab-sessions">
+
+                                        <div class="list-group list-group-flush">
+
+
+                                            <div class="list-group-item">
+
+                                                <div class="d-flex justify-content-between align-items-center">
+
+                                                    <div>
+
+                                                        <div class="fw-semibold">
+                                                            6:00 PM — Ambient & Dub
+                                                        </div>
+
+                                                        <div class="text-muted" style="font-size:12.5px;">
+
+                                                            Turntable 1 · 4 seats
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <span class="badge bg-instock">
+                                                        Confirmed
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="list-group-item">
+
+                                                <div class="d-flex justify-content-between align-items-center">
+
+                                                    <div>
+
+                                                        <div class="fw-semibold">
+                                                            8:00 PM — Jazz Deep Cuts
+                                                        </div>
+
+                                                        <div class="text-muted" style="font-size:12.5px;">
+
+                                                            Turntable 2 · 3 seats
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <span class="badge bg-low">
+                                                        Almost full
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="list-group-item">
+
+                                                <div class="d-flex align-items-center gap-2 text-muted">
+
+                                                    <span class="spinner-border spinner-border-sm"
+                                                        style="color:var(--rust);">
+                                                    </span>
+
+                                                    <span>
+                                                        Loading tomorrow's schedule…
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+
+
+
+                                    <div class="tab-pane fade p-3" id="tab-lowstock">
+
+                                        <div class="list-group list-group-flush">
+
+
+                                            <div class="list-group-item">
+
+                                                <div class="d-flex gap-3">
+
+                                                    <span class="placeholder rounded-circle"
+                                                        style="width:40px;height:40px;">
+                                                    </span>
+
+                                                    <div class="flex-fill">
+
+                                                        <span class="placeholder col-6 mb-1 d-block">
+                                                        </span>
+
+                                                        <span class="placeholder col-4 d-block">
+                                                        </span>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="list-group-item">
+
+                                                <div class="d-flex gap-3">
+
+                                                    <span class="placeholder rounded-circle"
+                                                        style="width:40px;height:40px;">
+                                                    </span>
+
+                                                    <div class="flex-fill">
+
+                                                        <span class="placeholder col-7 mb-1 d-block">
+                                                        </span>
+
+                                                        <span class="placeholder col-3 d-block">
+                                                        </span>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- FEATURED -->
+
+                        <section class="block">
+
+                            <div class="block-head">
+
+                                <h2>
+                                    Featured this week
+                                </h2>
+
+                                <a href="#" style="font-size:13px;font-weight:600;text-decoration:none;">
+
+                                    View catalog →
+
+                                </a>
+
+                            </div>
+
+
+                            <div id="featuredCarousel" class="carousel slide featured-carousel" data-bs-ride="carousel">
+
+
+                                <div class="carousel-indicators">
+
+                                    <button type="button" data-bs-target="#featuredCarousel" data-bs-slide-to="0">
+                                    </button>
+
+                                    <button type="button" data-bs-target="#featuredCarousel" data-bs-slide-to="1">
+                                    </button>
+
+                                    <button type="button" data-bs-target="#featuredCarousel" data-bs-slide-to="2"
+                                        class="active">
+                                    </button>
+
+                                </div>
+
+
+                                <div class="carousel-inner">
+
+
+                                    <div class="carousel-item">
+
+                                        <div class="featured-slide">
+
+                                            <div>
+
+                                                <div class="catno mb-2"
+                                                    style="color:#fff;border-color:rgba(255,255,255,0.35);">
+
+                                                    CAT · 118
+
+                                                </div>
+
+                                                <h5>
+                                                    Wireless Headphones
+                                                </h5>
+
+                                                <p>
+                                                    Restocked · 8 units
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="carousel-item">
+
+                                        <div class="featured-slide">
+
+                                            <div>
+
+                                                <div class="catno mb-2"
+                                                    style="color:#fff;border-color:rgba(255,255,255,0.35);">
+
+                                                    CAT · 119
+
+                                                </div>
+
+                                                <h5>
+                                                    Smart Watch Series
+                                                </h5>
+
+                                                <p>
+                                                    New arrival · 12 units
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="carousel-item active">
+
+                                        <div class="featured-slide">
+
+                                            <div>
+
+                                                <div class="catno mb-2"
+                                                    style="color:#fff;border-color:rgba(255,255,255,0.35);">
+
+                                                    CAT · 120
+
+                                                </div>
+
+                                                <h5>
+                                                    Portable Bluetooth Speaker
+                                                </h5>
+
+                                                <p>
+                                                    Best seller · 6 units
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel"
+                                    data-bs-slide="prev">
+
+                                    <span class="carousel-control-prev-icon"></span>
+
+                                </button>
+
+
+                                <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel"
+                                    data-bs-slide="next">
+
+                                    <span class="carousel-control-next-icon"></span>
+
+                                </button>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+
+
+                    <div class="col-lg-5">
+
+
+                        <!-- Stock Health -->
+
+                        <section class="block">
+
+                            <div class="card">
+
+                                <div class="card-header">
+                                    Stock health by genre
+                                </div>
+
+                                <div class="card-body">
+
+
+                                    <div class="mb-3">
+
+                                        <div class="d-flex justify-content-between mb-1">
+
+                                            <span>
+                                                Jazz
+                                            </span>
+
+                                            <span class="text-muted">
+                                                82%
+                                            </span>
+
+                                        </div>
+
+                                        <div class="progress">
+
+                                            <div class="progress-bar" style="width:82%">
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="mb-3">
+
+                                        <div class="d-flex justify-content-between mb-1">
+
+                                            <span>
+                                                Soul & Funk
+                                            </span>
+
+                                            <span class="text-muted">
+                                                64%
+                                            </span>
+
+                                        </div>
+
+                                        <div class="progress">
+
+                                            <div class="progress-bar" style="width:64%">
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="mb-1">
+
+                                        <div class="d-flex justify-content-between mb-1">
+
+                                            <span>
+                                                Post-Punk
+                                            </span>
+
+                                            <span class="text-muted">
+                                                31%
+                                            </span>
+
+                                        </div>
+
+                                        <div class="progress">
+
+                                            <div class="progress-bar amber" style="width:31%">
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="block">
+
+                            <div class="card">
+
+                                <div class="card-header">
+                                    Session policies
+                                </div>
+
+                                <div class="card-body pt-0">
+
+                                    <div class="accordion" id="policyAccordion">
+
+
+                                        <div class="accordion-item">
+
+                                            <h3 class="accordion-header">
+
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#p1">
+
+                                                    Cancellation window
+
+                                                </button>
+
+                                            </h3>
+
+
+                                            <div id="p1" class="accordion-collapse collapse show"
+                                                data-bs-parent="#policyAccordion">
+
+                                                <div class="accordion-body">
+
+                                                    Guests can cancel up to 4 hours before
+                                                    a session for a full refund. After that,
+                                                    credit is issued toward a future booking.
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="accordion-item">
+
+                                            <h3 class="accordion-header">
+
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#p2">
+
+                                                    Turntable maintenance
+
+                                                </button>
+
+                                            </h3>
+
+
+                                            <div id="p2" class="accordion-collapse collapse"
+                                                data-bs-parent="#policyAccordion">
+
+                                                <div class="accordion-body">
+
+                                                    Turntables should be inspected before
+                                                    scheduled sessions and serviced whenever
+                                                    cartridge or stylus wear is detected.
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="accordion-item">
+
+                                            <h3 class="accordion-header">
+
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#p3">
+
+                                                    Walk-in guests
+
+                                                </button>
+
+                                            </h3>
+
+
+                                            <div id="p3" class="accordion-collapse collapse"
+                                                data-bs-parent="#policyAccordion">
+
+                                                <div class="accordion-body">
+
+                                                    Walk-in guests can join available sessions
+                                                    when seats remain open.
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+
+                        <section class="block">
+
+                            <button class="btn btn-outline-ink btn-sm w-100" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#staffNote">
+
+                                <i class="bi bi-sticky me-1"></i>
+                                Store note for today
+
+                            </button>
+
+
+                            <div class="mt-2 collapse" id="staffNote">
+
+                                <div class="card">
+
+                                    <div class="card-body" style="font-size:13.5px;color:var(--ink-soft);">
+
+                                        New product shipment arrives around 2 PM.
+                                        All new items should be checked, priced,
+                                        and added to the catalog before evening.
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content inventory-modal">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Add a record to inventory</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <label for="productTitle" class="form-label">Title &amp; artist</label>
+                        <input type="text" class="form-control" id="productTitle" placeholder="e.g. Moon Safari — Air">
+                    </div>
+
+                    <div class="row g-2 mb-4">
+                        <div class="col-6">
+                            <label for="productGenre" class="form-label">Genre</label>
+                            <select class="form-select" id="productGenre">
+                                <option value="Jazz" selected>Jazz</option>
+                                <option value="Soul & Funk">Soul &amp; Funk</option>
+                                <option value="Post-Punk">Post-Punk</option>
+                                <option value="Ambient">Ambient</option>
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <label for="productCopies" class="form-label">Copies</label>
+                            <input type="number" class="form-control" id="productCopies" value="1" min="1">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="productPrice" class="form-label">Price (₹)</label>
+                        <input type="number" class="form-control" id="productPrice" placeholder="2450" min="0">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-ink" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-rust" onclick="addProduct()">Add to catalog</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function toggleSearch() {
+
+            const input =
+                document.getElementById('orderSearchInput');
+
+            input.classList.toggle('open');
+
+            if (input.classList.contains('open')) {
+
+                input.focus();
+
+            } else {
+
+                input.value = '';
+
+                filterOrders('');
+
+            }
+
+        }
+
+
+        function filterOrders(query) {
+
+            const q =
+                query.trim().toLowerCase();
+
+            const rows =
+                document.querySelectorAll(
+                    '#ordersList .order-row'
+                );
+
+            let visibleCount = 0;
+
+
+            rows.forEach(row => {
+
+                const match =
+                    row.dataset.title.includes(q);
+
+                row.style.display =
+                    match ? '' : 'none';
+
+                if (match) {
+
+                    visibleCount++;
+
+                }
+
+            });
+
+
+            document.getElementById('noOrdersMsg')
+                .classList.toggle(
+                    'd-none',
+                    visibleCount > 0
+                );
+
+        }
+
+
+
+        function addProduct() {
+
+            const title =
+                document.getElementById('productTitle').value.trim();
+
+            const genre =
+                document.getElementById('productGenre').value;
+
+            const copies =
+                document.getElementById('productCopies').value;
+
+            const price =
+                document.getElementById('productPrice').value;
+
+
+            if (!title || !genre || !copies || !price) {
+
+                alert('Please fill in all fields.');
+
+                return;
+
+            }
+
+
+            alert(
+                'Product added successfully!\n\n' +
+                'Title & Artist: ' + title + '\n' +
+                'Genre: ' + genre + '\n' +
+                'Copies: ' + copies + '\n' +
+                'Price: ₹' + price
+            );
+
+
+            /* Clear form */
+
+            document.getElementById('productTitle').value = '';
+
+            document.getElementById('productGenre').value = '';
+
+            document.getElementById('productCopies').value = '';
+
+            document.getElementById('productPrice').value = '';
+
+
+
+            const modalElement =
+                document.getElementById('addProductModal');
+
+            const modal =
+                bootstrap.Modal.getInstance(modalElement);
+
+            modal.hide();
+
+        }
+
+
+
+        function animateNumber(element, start, end, duration, prefix = "", suffix = "") {
+
+            if (!element) return;
+
+            const startTime = performance.now();
+
+            function update(currentTime) {
+
+                const progress = Math.min(
+                    (currentTime - startTime) / duration,
+                    1
+                );
+
+                const value = Math.floor(
+                    start + (end - start) * progress
+                );
+
+                element.textContent =
+                    prefix +
+                    value.toLocaleString('en-IN') +
+                    suffix;
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            animateNumber(
+                document.getElementById('revenueCount'),
+                0,
+                18240,
+                8000,
+                '₹'
+            );
+
+            animateNumber(
+                document.getElementById('stockCount'),
+                0,
+                1486,
+                8000
+            );
+
+            animateNumber(
+                document.getElementById('seatsCount'),
+                0,
+                7,
+                5000,
+                '',
+                ' / 24'
+            );
+
+            animateNumber(
+                document.getElementById('membersCount'),
+                0,
+                9,
+                5000
+            );
+
+        });
+
+    </script>
+
+
+    <!-- Bootstrap JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</body>
+
+</html>
