@@ -32,7 +32,3 @@ Add this before `</body>` (needed for the navbar toggle and carousel):
 ## How to Run
 
 Open the `.html` file with Live Server or in the browser. Internet is needed for the CDN links.
-
-## Author
-
-Bhanusri Manukonda
